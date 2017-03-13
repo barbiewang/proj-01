@@ -24,6 +24,7 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+//判断是否系相交
 Enemy.prototype.isInsideRect = function (rect) {
     return (this.isPointInsideRect(this.x,this.y,rect)
     || this.isPointInsideRect(this.x + 101, this.y, rect)
@@ -33,7 +34,7 @@ Enemy.prototype.isInsideRect = function (rect) {
 
 Enemy.prototype.isPointInsideRect = function(px,py,rect){
     return px > rect[0] && px< (rect[0] + rect[2]) && py > rect[1] && py < (rect[1] + rect[3]);
-}
+};
 
 
 // 现在实现你自己的玩家类
@@ -45,13 +46,13 @@ var Player = function() {
     this.reset();
 };
 
-Player.prototype.update = function(dt) {
-    console.log("update player " + dt);
-};
-
 Player.prototype.reset = function() {
     this.xidx = parseInt(this.xsteps.length / 2);
     this.yidx = this.ysteps.length - 1;
+};
+
+Player.prototype.update = function(dt) {
+
 };
 
 Player.prototype.render = function () {
@@ -60,7 +61,8 @@ Player.prototype.render = function () {
 
 Player.prototype.playerRect = function () {
     return [this.xsteps[this.xidx], this.ysteps[this.yidx], 101, 83];
-}
+};
+
 Player.prototype.handleInput = function (key) {
     switch(key){
         case "left":
@@ -98,8 +100,6 @@ allEnemies.push(enemy3);
 
 var player = new Player()
 
-player.y = player.ysteps[5];
-player.x = player.xsteps[4];
 
 // 这段代码监听游戏玩家的键盘点击事件并且代表将按键的关键数字送到 Play.handleInput()
 // 方法里面。你不需要再更改这段代码了。
