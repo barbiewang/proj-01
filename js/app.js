@@ -5,7 +5,7 @@ var Enemy = function() {
 
     // 敌人的图片或者雪碧图，用一个我们提供的工具函数来轻松的加载文件
     this.sprite = 'images/enemy-bug.png';
-    this.speed = 100;
+    this.speed = 300;
     this.x = 0;
     this.y = 0;
 };
@@ -43,7 +43,12 @@ var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.ysteps = [-10, 70, 155,235, 320, 405 ];
     this.xsteps = [0, 101, 202, 303, 404];
+    this.sprites =['images/char-boy.png','images/char-cat-girl.png','images/char-horn-girl.png','images/char-pink-girl.png','images/char-princess-girl.png'];
     this.reset();
+};
+
+Player.prototype.changeStyle = function (idx) {
+    this.sprite = this.sprites[idx % this.sprites.length];
 };
 
 Player.prototype.reset = function() {
@@ -56,7 +61,8 @@ Player.prototype.update = function(dt) {
 };
 
 Player.prototype.render = function () {
-    ctx.drawImage(Resources.get(this.sprite), this.xsteps[this.xidx], this.ysteps[this.yidx]);
+    var x = Resources.get(this.sprite);
+    ctx.drawImage(x, this.xsteps[this.xidx], this.ysteps[this.yidx]);
 };
 
 Player.prototype.playerRect = function () {
@@ -79,6 +85,37 @@ Player.prototype.handleInput = function (key) {
             break;
     }
 };
+
+Player.prototype.isWin = function () {
+    return this.yidx === 0;
+};
+
+var Score = function(){
+    this.mi = 1;
+    this.gr = 0;
+};
+
+Score.prototype.incMission = function () {
+    this.mi = this.mi + 1;
+};
+
+Score.prototype.incGrade = function () {
+    this.gr = this.gr + 1;
+};
+
+Score.prototype.reset = function () {
+    this.gr = 0;
+    this.mi = 1;
+};
+
+Score.prototype.render = function(){
+    ctx.font = "bold 10px Arial";
+    ctx.fillText("grade:" + this.gr, 10,550);
+    ctx.fillText("mission:"+this.mi,10,570);
+
+};
+
+
 // 现在实例化你的所有对象
 // 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
 // 把玩家对象放进一个叫 player 的变量里面
@@ -87,18 +124,28 @@ var allEnemies = [];
 var enemy1 = new Enemy();
 enemy1.y = 155;
 enemy1.x = 0;
+enemy1.speed = 200;
 var enemy2 = new Enemy();
 enemy2.y = 75;
 enemy2.x = 50;
+enemy2.speed = 180;
 var enemy3 = new Enemy();
 enemy3.y = 235;
 enemy3.x = 0;
+var enemy4 = new Enemy();
+enemy4.x = 50;
+enemy4.y = 75;
+enemy4.speed = 300;
+
 
 allEnemies.push(enemy1);
 allEnemies.push(enemy2);
 allEnemies.push(enemy3);
+allEnemies.push(enemy4);
 
-var player = new Player()
+var player = new Player();
+player.changeStyle(3);
+var score = new Score();
 
 
 // 这段代码监听游戏玩家的键盘点击事件并且代表将按键的关键数字送到 Play.handleInput()
@@ -113,3 +160,4 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+

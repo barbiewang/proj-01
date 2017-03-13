@@ -65,10 +65,19 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        var collision = checkCollisions();
-        if (collision) {
-            player.reset()
+
+        if (player.isWin()) {
+            player.reset();
+            score.incGrade();
+            score.incMission();
+        }  else {
+            var collision = checkCollisions();
+            if (collision) {
+                player.reset();
+                score.incMission();
+            }
         }
+
     }
 
     function  checkCollisions() {
@@ -133,6 +142,7 @@ var Engine = (function(global) {
         });
 
         player.render();
+        score.render();
     }
 
     /* 这个函数现在没干任何事，但是这会是一个好地方让你来处理游戏重置的逻辑。可能是一个
@@ -141,6 +151,7 @@ var Engine = (function(global) {
      */
     function reset() {
         // 空操作
+        score.reset();
     }
 
     /* 紧接着我们来加载我们知道的需要来绘制我们游戏关卡的图片。然后把 init 方法设置为回调函数。
@@ -151,7 +162,11 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png'
     ]);
     Resources.onReady(init);
 
