@@ -3,17 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Effective JavaScript: Frogger</title>
-    <link rel="stylesheet" href="css/style.css" onclick="js-func(1)">
+    <style type = "text/css">
+        *{
+
+        }
+    </style>
 </head>
 <body>
     <script src="js/resources.js"></script>
     <script src="js/app.js"></script>
     <script src="js/engine.js"></script>
+    <div class = "image">
+        <img src = "images/char-boy.png" alt = "char-boy" title = "char-boy" onclick = "player.changeStyle(0)" />
+      <!--  <span>char-boy</span> -->
+        <img src = "images/char-cat-girl.png" alt = "char-cat-girl" title = "char-cat-girl" onclick = "player.changeStyle(1)" />
+      <!--  <span>char-cat-girl</span> -->
+        <img src = "images/char-horn-girl.png" alt = "char-horn-gir" title = "char-horn-gir"  onclick = "player.changeStyle(2)" />
+        <!--<span>char-horn-gir</span> -->
+        <img src = "images/char-pink-girl.png" alt = "char-pink-girl" title = "char-pink-girl" onclick = "player.changeStyle(3)" />
+        <!--<span>char-pink-girl</span> -->
+        <img src = "images/char-princess-girl.png" alt = "char-princess-girl" title = "char-princess-girl" onclick = "player.changeStyle(4)" />
+        <!-- <span>char-princess-girl</span> -->
+    </div>
+<!--
     <button class = "playerStyle" >char-boy</button>
     <button class = "playerStyle" onclick = "player.changeStyle(1)">char-cat-girl</button>
     <button class = "playerStyle" >char-horn-girl</button>
     <button class = "playerStyle" >char-pink-girl</button>
     <button class = "playerStyle" >char-princess-girl</button>
-
+    -->
 </body>
 </html>
