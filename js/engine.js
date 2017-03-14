@@ -78,9 +78,6 @@ var Engine = (function(global) {
             }
         }
 
-       if(player.isWin() && allDiamonds.isGet()){
-            score.incDiamond();
-        }
     }
 
     function  checkCollisions() {
@@ -146,9 +143,6 @@ var Engine = (function(global) {
 
         player.render();
         score.render();
-        allDiamonds.forEach(function(diamond){
-            diamond.render();
-        })
     }
 
     /* 这个函数现在没干任何事，但是这会是一个好地方让你来处理游戏重置的逻辑。可能是一个
@@ -172,10 +166,7 @@ var Engine = (function(global) {
         'images/char-cat-girl.png',
         'images/char-horn-girl.png',
         'images/char-pink-girl.png',
-        'images/char-princess-girl.png',
-        'images/Gem Blue.png',
-        'images/Gem Green.png',
-        'images/Gem Orange.png'
+        'images/char-princess-girl.png'
     ]);
     Resources.onReady(init);
 

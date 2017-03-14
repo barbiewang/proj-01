@@ -92,7 +92,6 @@ Player.prototype.isWin = function () {
 var Score = function(){
     this.mi = 1;
     this.gr = 0;
-    this.di = 0;
 };
 
 Score.prototype.incMission = function () {
@@ -102,40 +101,16 @@ Score.prototype.incMission = function () {
 Score.prototype.incGrade = function () {
     this.gr = this.gr + 1;
 };
-Score.prototype .incDiamond = function(){
-    this.di = this.di + 1;
-};
 
 Score.prototype.reset = function () {
     this.gr = 0;
     this.mi = 1;
-    this.di = 0;
 };
 
 Score.prototype.render = function(){
     ctx.font = "bold 10px Arial";
     ctx.fillText("grade:" + this.gr, 10,550);
     ctx.fillText("mission:"+this.mi,10,570);
-    ctx.fillText("diamond:"+this.di,110,550);
-};
-
-var Diamond = function(){
-    this.gem = "images/Gem Blue.png";
-    this.gems = ["images/Gem Blue.png","images/Gem Green.png","images/Gem Orange.png"];
-    this.x = 0;
-    this.y = 0;
-
-};
-Diamond.prototype.chooseGem = function(ind){
-    this.gem = this.gems[ind % this.gems.length];
-};
-Diamond.prototype.render = function(){
-    ctx.drawImage(Resources.get(this.gem),this.x,this.y);
-};
-Diamond.prototype.isGet= function(){
-    allDiamonds.forEach(function(diamond){
-         return this.x === player.xsteps[xidx] && this.y === player.ysteps[yidx];
-        })
 };
 
 
@@ -172,25 +147,6 @@ player.changeStyle(3);
 
 var score = new Score();
 
-var allDiamonds = [];
-var diamond1 = new Diamond();
-diamond1.x = 0;
-diamond1.y = 70;
-diamond1.chooseGem(0);
-
-var diamond2 = new Diamond();
-diamond2.x = 202;
-diamond2.y = 155;
-diamond2.chooseGem(1);
-
-var diamond3 = new Diamond();
-diamond3.x = 303;
-diamond3.y = 320;
-diamond3.chooseGem(2);
-
-allDiamonds.push(diamond1);
-allDiamonds.push(diamond2);
-allDiamonds.push(diamond3);
 
 
 
