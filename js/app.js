@@ -8,7 +8,7 @@ var Enemy = function() {
 
     // 敌人的图片或者雪碧图，用一个我们提供的工具函数来轻松的加载文件
     this.sprite = 'images/enemy-bug.png';
-    this.speed = 300;
+    this.speed = 0;
     this.x = 0;
     this.y = 0;
 };
@@ -137,7 +137,7 @@ Score.prototype.render = function(){
 var allEnemies = [];
 var x = -10;
 var y = [75,75,155,235];
-var	speed = [180,300,200,150];
+var	speed = [100,150,80,120];
 for(var i =0; i<y.length;i++){
 	var enemy = new Enemy();
 	enemy.x = x;
