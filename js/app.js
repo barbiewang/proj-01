@@ -24,13 +24,14 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-//判断是否系相交
+//判断是否系相交：判断敌人图像的四个顶点是否有一个以上在玩家图像的矩形中，返回布尔值。
 Enemy.prototype.isInsideRect = function (rect) {
     return (this.isPointInsideRect(this.x,this.y,rect)
     || this.isPointInsideRect(this.x + 101, this.y, rect)
     || this.isPointInsideRect(this.x, this.y + 83, rect)
     || this.isPointInsideRect(this.x + 101, this.y + 83, rect));
 };
+//判断是否相交：通过判断敌人的图像是否与玩家图像有重叠之处，返回布尔值。
 Enemy.prototype.isPointInsideRect = function(px,py,rect){
     return px > rect[0] && px< (rect[0] + rect[2]) && py > rect[1] && py < (rect[1] + rect[3]);
 };
@@ -38,6 +39,7 @@ Enemy.prototype.isPointInsideRect = function(px,py,rect){
 
 // 现在实现你自己的玩家类
 // 这个类需要一个 update() 函数， render() 函数和一个 handleInput()函数
+// 设置玩家的头像及可能行走的位置。默认位置重置。
 var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.ysteps = [-10, 70, 155,235, 320, 405 ];
@@ -46,28 +48,34 @@ var Player = function() {
     this.reset();
 };
 
+//选择玩家头像
 Player.prototype.changeStyle = function (idx) {
     this.sprite = this.sprites[idx % this.sprites.length];
 };
 
+//玩家位置重置函数
 Player.prototype.reset = function() {
     this.xidx = parseInt(this.xsteps.length / 2);
     this.yidx = this.ysteps.length - 1;
 };
 
+
 Player.prototype.update = function(dt) {
 
 };
 
+//画出玩家
 Player.prototype.render = function () {
     var x = Resources.get(this.sprite);
     ctx.drawImage(x, this.xsteps[this.xidx], this.ysteps[this.yidx]);
 };
 
+//用于检查是否碰撞的函数，该函数返回玩家所在的位置及所占的空间
 Player.prototype.playerRect = function () {
     return [this.xsteps[this.xidx], this.ysteps[this.yidx], 101, 83];
 };
 
+//游戏操作函数
 Player.prototype.handleInput = function (key) {
     switch(key){
         case "left":
@@ -85,10 +93,12 @@ Player.prototype.handleInput = function (key) {
     }
 };
 
+//判断玩家是否赢了，返回布尔值
 Player.prototype.isWin = function () {
     return this.yidx === 0;
 };
 
+//新增一个得分函数
 var Score = function(){
     this.mi = 1;
     this.gr = 0;
@@ -120,27 +130,16 @@ Score.prototype.render = function(){
 // 把玩家对象放进一个叫 player 的变量里面
 
 var allEnemies = [];
-var enemy1 = new Enemy();
-enemy1.y = 155;
-enemy1.x = 0;
-enemy1.speed = 200;
-var enemy2 = new Enemy();
-enemy2.y = 75;
-enemy2.x = 50;
-enemy2.speed = 180;
-var enemy3 = new Enemy();
-enemy3.y = 235;
-enemy3.x = 0;
-var enemy4 = new Enemy();
-enemy4.x = 50;
-enemy4.y = 75;
-enemy4.speed = 300;
-
-
-allEnemies.push(enemy1);
-allEnemies.push(enemy2);
-allEnemies.push(enemy3);
-allEnemies.push(enemy4);
+var x = -10;
+var y = [75,75,155,235];
+var	speed = [180,300,200,150];
+for(var i =0; i<y.length;i++){
+	var enemy = new Enemy();
+	enemy.x = x;
+	enemy.y = y[i];
+	enemy.speed = speed[i];
+	allEnemies.push(enemy);
+}
 
 var player = new Player();
 player.changeStyle(3);
