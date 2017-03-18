@@ -101,27 +101,29 @@ Player.prototype.isWin = function () {
 
 //新增一个得分函数
 var Score = function(){
-    this.mi = 1;
-    this.gr = 0;
+    this.s = 0;
+    this.f = 0;
 };
 
-Score.prototype.incMission = function () {
-    this.mi = this.mi + 1;
+Score.prototype.failure = function () {
+    this.f = this.f + 1;
 };
 
-Score.prototype.incGrade = function () {
-    this.gr = this.gr + 1;
+Score.prototype.success = function () {
+    this.s = this.s + 1;
 };
 
 Score.prototype.reset = function () {
-    this.gr = 0;
-    this.mi = 1;
+    this.s = 0;
+    this.f = 0;
 };
 
 Score.prototype.render = function(){
     ctx.font = "bold 10px Arial";
-    ctx.fillText("grade:" + this.gr, 10,550);
-    ctx.fillText("mission:"+this.mi,10,570);
+	ctx.fillStyle = "blue";
+    ctx.fillText("success:" + this.s, 10,550);
+	ctx.fillStyle = "red";
+    ctx.fillText("failure:"+this.f,10,570);
 };
 
 

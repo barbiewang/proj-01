@@ -68,13 +68,12 @@ var Engine = (function(global) {
 
         if (player.isWin()) {
             player.reset();
-            score.incGrade();
-            score.incMission();
+            score.success();
         }  else {
             var collision = checkCollisions();
             if (collision) {
                 player.reset();
-                score.incMission();
+                score.failure();
             }
         }
 
