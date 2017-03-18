@@ -1,5 +1,7 @@
 // 这是我们的玩家要躲避的敌人 
 "use strict";
+var TILE_WIDTH = 101,
+    TILE_HEIGHT = 83; 
 var Enemy = function() {
     // 要应用到每个敌人的实例的变量写在这里
     // 我们已经提供了一个来帮助你实现更多
@@ -17,7 +19,7 @@ Enemy.prototype.update = function(dt) {
     //console.log("update enemy " + dt);
     // 你应该给每一次的移动都乘以 dt 参数，以此来保证游戏在所有的电脑上
     // 都是以同样的速度运行的
-    this.x = (this.x + this.speed * dt) % 505
+    this.x = (this.x + this.speed * dt) % (TILE_WIDTH * 5)//保证小虫子不会出现在画布外
 };
 
 // 此为游戏必须的函数，用来在屏幕上画出敌人，
@@ -28,9 +30,9 @@ Enemy.prototype.render = function() {
 //判断是否系相交：判断敌人图像的四个顶点是否有一个以上在玩家图像的矩形中，返回布尔值。
 Enemy.prototype.isInsideRect = function (rect) {
     return (this.isPointInsideRect(this.x,this.y,rect)
-    || this.isPointInsideRect(this.x + 101, this.y, rect)
-    || this.isPointInsideRect(this.x, this.y + 83, rect)
-    || this.isPointInsideRect(this.x + 101, this.y + 83, rect));
+    || this.isPointInsideRect(this.x + TILE_WIDTH, this.y, rect)
+    || this.isPointInsideRect(this.x, this.y + TILE_HEIGHT, rect)
+    || this.isPointInsideRect(this.x + TILE_WIDTH, this.y + TILE_HEIGHT, rect));
 };
 //判断是否相交：通过判断敌人的图像是否与玩家图像有重叠之处，返回布尔值。
 Enemy.prototype.isPointInsideRect = function(px,py,rect){
@@ -44,7 +46,7 @@ Enemy.prototype.isPointInsideRect = function(px,py,rect){
 var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.ysteps = [-10, 70, 155,235, 320, 405 ];
-    this.xsteps = [0, 101, 202, 303, 404];
+    this.xsteps = [0, TILE_WIDTH, 202, 303, 404];
     this.sprites =['images/char-boy.png','images/char-cat-girl.png','images/char-horn-girl.png','images/char-pink-girl.png','images/char-princess-girl.png'];
     this.reset();
 };
@@ -73,7 +75,7 @@ Player.prototype.render = function () {
 
 //用于检查是否碰撞的函数，该函数返回玩家所在的位置及所占的空间
 Player.prototype.playerRect = function () {
-    return [this.xsteps[this.xidx], this.ysteps[this.yidx], 101, 83];
+    return [this.xsteps[this.xidx], this.ysteps[this.yidx], TILE_WIDTH, TILE_HEIGHT];
 };
 
 //游戏操作函数

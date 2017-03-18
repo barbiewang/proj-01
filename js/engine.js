@@ -10,6 +10,8 @@
  * 公开访问，以此使编写app.js的时候更加容易
  */
 "use strict";
+var TILE_WIDTH = 101,
+    TILE_HEIGHT = 83;
 var Engine = (function(global) {
     /* 实现定义我们会在这个作用于用到的变量
      * 创建 canvas 元素，拿到对应的 2D 上下文
@@ -21,8 +23,8 @@ var Engine = (function(global) {
         ctx = canvas.getContext('2d'),
         lastTime;
 
-    canvas.width = 505;
-    canvas.height = 606;
+    canvas.width = TILE_WIDTH * 5;
+    canvas.height = TILE_WIDTH * 6;
     doc.body.appendChild(canvas);
 
     /* 这个函数是整个游戏的主入口，负责适当的调用 update / render 函数 */
@@ -124,7 +126,7 @@ var Engine = (function(global) {
                  * 第二个和第三个分别是起始点的x和y坐标。我们用我们事先写好的资源管理工具来获取
                  * 我们需要的图片，这样我们可以享受缓存图片的好处，因为我们会反复的用到这些图片
                  */
-                ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+                ctx.drawImage(Resources.get(rowImages[row]), col * TILE_WIDTH, row * TILE_HEIGHT);
             }
         }
 
