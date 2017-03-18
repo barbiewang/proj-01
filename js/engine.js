@@ -39,9 +39,9 @@ var Engine = (function(global) {
         /* 调用我们的 update / render 函数， 传递事件间隙给 update 函数因为这样
          * 可以使动画更加顺畅。
          */
+
         update(dt);
         render();
-
         /* 设置我们的 lastTime 变量，它会被用来决定 main 函数下次被调用的事件。 */
         lastTime = now;
 
@@ -71,11 +71,15 @@ var Engine = (function(global) {
         if (player.isWin()) {
             player.reset();
             score.success();
+			hint.success();
+			//hint.reset();
         }  else {
             var collision = checkCollisions();
             if (collision) {
                 player.reset();
                 score.failure();
+				hint.failure();
+				//hint.reset();
             }
         }
 
@@ -84,7 +88,7 @@ var Engine = (function(global) {
     function  checkCollisions() {
         var isCollision = false;
         allEnemies.forEach(function(enemy) {
-               isCollision = (isCollision || enemy.isInsideRect(player.playerRect()));
+               isCollision = (isCollision || enemy.isCross(player.playerRect()));
         });
         return isCollision;
     }

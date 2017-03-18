@@ -11,15 +11,17 @@ var Enemy = function() {
     this.speed = 0;
     this.x = 0;
     this.y = 0;
+    this.fakex = 0;
 };
 
 // 此为游戏必须的函数，用来更新敌人的位置
 // 参数: dt ，表示时间间隙
 Enemy.prototype.update = function(dt) {
-    //console.log("update enemy " + dt);
     // 你应该给每一次的移动都乘以 dt 参数，以此来保证游戏在所有的电脑上
     // 都是以同样的速度运行的
-    this.x = (this.x + this.speed * dt) % (TILE_WIDTH * 5)//保证小虫子不会出现在画布外
+    //此方法用于使虫子缓缓从头开始走
+    this.fakex = (this.fakex + this.speed * dt) % (8 * TILE_HEIGHT);
+    this.x = this.fakex - 2 * TILE_WIDTH;
 };
 
 // 此为游戏必须的函数，用来在屏幕上画出敌人，
@@ -27,26 +29,33 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-//判断是否系相交：判断敌人图像的四个顶点是否有一个以上在玩家图像的矩形中，返回布尔值。
-Enemy.prototype.isInsideRect = function (rect) {
-    return (this.isPointInsideRect(this.x,this.y,rect)
-    || this.isPointInsideRect(this.x + TILE_WIDTH, this.y, rect)
-    || this.isPointInsideRect(this.x, this.y + TILE_HEIGHT, rect)
-    || this.isPointInsideRect(this.x + TILE_WIDTH, this.y + TILE_HEIGHT, rect));
+//判断是否相交，通过判断两个图像的中点之前的距离是否小于对应边之和的一半
+Enemy.prototype.isCross = function(rect){
+    var enemyCenter = [this.x  + TILE_WIDTH / 2 ,this.y+ TILE_HEIGHT / 2];
+    var playerCenter = [rect[0] + rect[2] / 2,rect[1] + rect[3] / 2];
+    var xDistance = enemyCenter[0] > playerCenter[0] ? enemyCenter[0] - playerCenter[0]:playerCenter[0]-enemyCenter[0];
+    var yDistance = enemyCenter[1] > playerCenter[1] ? enemyCenter[1] - playerCenter[1] : playerCenter[1] - enemyCenter[1];
+    return xDistance < (TILE_WIDTH + rect[2]) / 2 && yDistance < (TILE_HEIGHT + rect[3])/2;
 };
-//判断是否相交：通过判断敌人的图像是否与玩家图像有重叠之处，返回布尔值。
-Enemy.prototype.isPointInsideRect = function(px,py,rect){
-    return px > rect[0] && px< (rect[0] + rect[2]) && py > rect[1] && py < (rect[1] + rect[3]);
-};
-
 
 // 现在实现你自己的玩家类
 // 这个类需要一个 update() 函数， render() 函数和一个 handleInput()函数
 // 设置玩家的头像及可能行走的位置。默认位置重置。
 var Player = function() {
     this.sprite = 'images/char-boy.png';
-    this.ysteps = [-10, 70, 155,235, 320, 405 ];
-    this.xsteps = [0, TILE_WIDTH, 202, 303, 404];
+	
+	var xbase = 0;
+	this.xsteps = [];
+	for (var i = 0; i <= 4 ; i ++) {
+		this.xsteps.push(xbase + i * TILE_WIDTH);
+	}
+
+	var ybase = - 10;
+	this.ysteps = [];
+	for (var i = 0; i <= 5 ; i ++) {
+		this.ysteps.push(ybase + i * TILE_HEIGHT);
+	}
+
     this.sprites =['images/char-boy.png','images/char-cat-girl.png','images/char-horn-girl.png','images/char-pink-girl.png','images/char-princess-girl.png'];
     this.reset();
 };
@@ -101,7 +110,7 @@ Player.prototype.isWin = function () {
     return this.yidx === 0;
 };
 
-//新增一个得分函数
+//新增一个成功次数和失败次数的函数
 var Score = function(){
     this.s = 0;
     this.f = 0;
@@ -128,6 +137,26 @@ Score.prototype.render = function(){
     ctx.fillText("failure:"+this.f,10,570);
 };
 
+//新增一个提醒成功和失败的函数
+var Hint = function(){
+	this.f = "Fantastic";
+	this.u = "Unfortunately";
+	};
+
+Hint.prototype.success = function(){
+	ctx.font = "italic bold 50px Arial";
+	ctx.fillStyle = "blue";
+	ctx.fillText(this.f,300,-200);
+};
+Hint.prototype.failure = function(){
+	ctx.font = "italic bold 50px Arial";
+	ctx.fillStyle = "red";
+	ctx.fillText(this.u,300,-200);
+};
+Hint.prototype.reset = function(){
+	this.f = "";
+	this.u = "";
+}
 
 
 // 现在实例化你的所有对象
@@ -136,13 +165,19 @@ Score.prototype.render = function(){
 
 var allEnemies = [];
 var x = -10;
-var y = [75,75,155,235];
+var y = -10;
 var	speed = [100,150,80,120];
-for(var i =0; i<y.length;i++){
+
+for(var i =0; i< speed.length;i++){
 	var enemy = new Enemy();
 	enemy.x = x;
-	enemy.y = y[i];
+	if (i == 0) {
+		enemy.y = y + TILE_HEIGHT;
+	} else {
+		enemy.y = y + i *TILE_HEIGHT;		
+	}
 	enemy.speed = speed[i];
+	console.log(enemy.y);
 	allEnemies.push(enemy);
 }
 
@@ -150,6 +185,7 @@ var player = new Player();
 player.changeStyle(3);
 
 var score = new Score();
+var hint = new Hint();
 
 
 
