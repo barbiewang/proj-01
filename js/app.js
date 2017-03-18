@@ -11,7 +11,7 @@ var Enemy = function() {
     this.speed = 0;
     this.x = 0;
     this.y = 0;
-    this.fakex = 0;
+    this.fakex = 0;//用于x值的循环
 };
 
 // 此为游戏必须的函数，用来更新敌人的位置
@@ -43,16 +43,15 @@ Enemy.prototype.isCross = function(rect){
 // 设置玩家的头像及可能行走的位置。默认位置重置。
 var Player = function() {
     this.sprite = 'images/char-boy.png';
-	
 	var xbase = 0;
 	this.xsteps = [];
-	for (var i = 0; i <= 4 ; i ++) {
+	for (var i = 0; i <= 4 ; i++) {
 		this.xsteps.push(xbase + i * TILE_WIDTH);
 	}
 
 	var ybase = - 10;
 	this.ysteps = [];
-	for (var i = 0; i <= 5 ; i ++) {
+	for (var i = 0; i <= 5 ; i++) {
 		this.ysteps.push(ybase + i * TILE_HEIGHT);
 	}
 
@@ -144,30 +143,24 @@ var Hint = function(){
 	};
 
 Hint.prototype.success = function(){
-	ctx.font = "italic bold 50px Arial";
-	ctx.fillStyle = "blue";
-	ctx.fillText(this.f,300,-200);
+	alert(this.f);
 };
 Hint.prototype.failure = function(){
-	ctx.font = "italic bold 50px Arial";
-	ctx.fillStyle = "red";
-	ctx.fillText(this.u,300,-200);
+	alert(this.u);
 };
-Hint.prototype.reset = function(){
-	this.f = "";
-	this.u = "";
-}
 
 
 // 现在实例化你的所有对象
 // 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
 // 把玩家对象放进一个叫 player 的变量里面
+//把得分放进一个叫score的变量里面
+//把提示放进一个叫hint的变量里面
 
 var allEnemies = [];
 var x = -10;
 var y = -10;
 var	speed = [100,150,80,120];
-
+//用for循环添加enemy
 for(var i =0; i< speed.length;i++){
 	var enemy = new Enemy();
 	enemy.x = x;
@@ -177,7 +170,6 @@ for(var i =0; i< speed.length;i++){
 		enemy.y = y + i *TILE_HEIGHT;		
 	}
 	enemy.speed = speed[i];
-	console.log(enemy.y);
 	allEnemies.push(enemy);
 }
 
@@ -203,15 +195,3 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
-
-/* var playerImage = document.getElementsByTagName("img");
-var context = document.getElementsByTagName("span");
-function dip(){
-    for(var i = 0; i< playerImage.length; i++){
-        playerImage[i].onmouseover = function(){
-            context[i].style.display = "block";
-    }
-}
-}
-dip();
- */

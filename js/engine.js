@@ -72,7 +72,7 @@ var Engine = (function(global) {
             player.reset();
             score.success();
 			hint.success();
-			//hint.reset();
+
         }  else {
             var collision = checkCollisions();
             if (collision) {
@@ -84,7 +84,7 @@ var Engine = (function(global) {
         }
 
     }
-
+// 检查是否碰撞
     function  checkCollisions() {
         var isCollision = false;
         allEnemies.forEach(function(enemy) {
@@ -155,7 +155,7 @@ var Engine = (function(global) {
      * 函数调用一次。
      */
     function reset() {
-        // 空操作
+        // 重置得分
         score.reset();
     }
 
