@@ -13,7 +13,12 @@ var Enemy = function() {
     this.y = 0;
     this.fakex = 0;//用于x值的循环
 };
-
+//重置敌人位置及速度
+Enemy.prototype.reset = function(){
+    this.fakex = 0;
+    this.x = Math.random() * (-20);//随机生成敌人开始的X轴的位置
+    this.speed = Math.random() * 50 + 50;//随机生成敌人的速度
+};
 // 此为游戏必须的函数，用来更新敌人的位置
 // 参数: dt ，表示时间间隙
 Enemy.prototype.update = function(dt) {
@@ -36,6 +41,10 @@ Enemy.prototype.isCross = function(rect){
     var xDistance = enemyCenter[0] > playerCenter[0] ? enemyCenter[0] - playerCenter[0]:playerCenter[0]-enemyCenter[0];
     var yDistance = enemyCenter[1] > playerCenter[1] ? enemyCenter[1] - playerCenter[1] : playerCenter[1] - enemyCenter[1];
     return xDistance < (TILE_WIDTH + rect[2]) / 2 && yDistance < (TILE_HEIGHT + rect[3])/2;
+};
+ //难度提高，加快敌人速度
+Enemy.prototype.speedUp = function(){
+    this.speed = this.speed + 50;
 };
 
 // 现在实现你自己的玩家类
@@ -99,7 +108,9 @@ Player.prototype.handleInput = function (key) {
             this.yidx = (this.yidx - 1 + this.ysteps.length) % this.ysteps.length;
             break;
         case "down":
-            this.yidx = (this.yidx + 1) % this.ysteps.length;
+            if (this.yidx < this.ysteps.length-1){
+               this.yidx = this.yidx + 1;
+            }
             break;
     }
 };
@@ -119,15 +130,26 @@ Score.prototype.failure = function () {
     this.f = this.f + 1;
 };
 
-Score.prototype.success = function () {
+Score.prototype.incSuccess = function () {
     this.s = this.s + 1;
+
+};
+//直接取得分数的函数
+Score.prototype.score = function(){
+    return this.s;
+};
+//判断失败次数是否大于5，返回布尔值
+Score.prototype.isGameOver = function(){
+    return this.f >= 5;
 };
 
+//重置得分
 Score.prototype.reset = function () {
     this.s = 0;
     this.f = 0;
 };
 
+//画出得分
 Score.prototype.render = function(){
     ctx.font = "bold 10px Arial";
 	ctx.fillStyle = "blue";
@@ -136,10 +158,12 @@ Score.prototype.render = function(){
     ctx.fillText("failure:"+this.f,10,570);
 };
 
-//新增一个提醒成功和失败的函数
+//新增一个提醒成功和失败，游戏结束或升级的函数
 var Hint = function(){
 	this.f = "Fantastic";
 	this.u = "Unfortunately";
+    this.g = "Game Over";
+    this.l = "Level Up";
 	};
 
 Hint.prototype.success = function(){
@@ -147,6 +171,12 @@ Hint.prototype.success = function(){
 };
 Hint.prototype.failure = function(){
 	alert(this.u);
+};
+Hint.prototype.gameOver = function(){
+    alert(this.g);
+};
+Hint.prototype.levelUp = function(){
+    alert(this.l);
 };
 
 
@@ -161,13 +191,12 @@ var y = -10;
 //用for循环添加enemy
 for(var i =0; i< 4;i++){
 	var enemy = new Enemy();
-	enemy.x = Math.random() * (-20); //随机生成x的起始位置
+    enemy.reset();
 	if (i == 0) {
 		enemy.y = y + TILE_HEIGHT;
 	} else {
 		enemy.y = y + i *TILE_HEIGHT;		
 	}
-	enemy.speed = Math.random() * 300;//随机生成虫子的速度
 	allEnemies.push(enemy);
 }
 

@@ -70,16 +70,34 @@ var Engine = (function(global) {
 
         if (player.isWin()) {
             player.reset();
-            score.success();
-			hint.success();
+            score.incSuccess();
 
+            //每得5分，难度提高一级，即敌人的速度在原来的基础上加50，并且提示升级，否则提示成功；
+            if(score.score() > 0 && score.score() % 5 === 0){
+                hint.levelUp();
+                allEnemies.forEach(function(enemy){
+                    enemy.speedUp();
+                    console.log(enemy.speed);
+                })
+            }else{
+                hint.success();
+            }
         }  else {
             var collision = checkCollisions();
             if (collision) {
                 player.reset();
                 score.failure();
-				hint.failure();
-				//hint.reset();
+                //如果累计失败5次，则提示游戏结束，敌人位置及速度重置，否则提示失败。
+                if(score.isGameOver()){
+                    hint.gameOver();
+                    score.reset();
+                    player.reset();
+                    allEnemies.forEach(function(enemy){
+                        enemy.reset();
+                    })
+                }else{
+                    hint.failure();
+                }
             }
         }
 
