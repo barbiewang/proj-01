@@ -157,19 +157,17 @@ Hint.prototype.failure = function(){
 //把提示放进一个叫hint的变量里面
 
 var allEnemies = [];
-var x = -10;
 var y = -10;
-var	speed = [100,150,80,120];
 //用for循环添加enemy
-for(var i =0; i< speed.length;i++){
+for(var i =0; i< 4;i++){
 	var enemy = new Enemy();
-	enemy.x = x;
+	enemy.x = Math.random() * (-20); //随机生成x的起始位置
 	if (i == 0) {
 		enemy.y = y + TILE_HEIGHT;
 	} else {
 		enemy.y = y + i *TILE_HEIGHT;		
 	}
-	enemy.speed = speed[i];
+	enemy.speed = Math.random() * 300;//随机生成虫子的速度
 	allEnemies.push(enemy);
 }
 
